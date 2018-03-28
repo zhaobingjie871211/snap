@@ -345,8 +345,9 @@ check_psl:
 		fi; \
 	fi
 
-image: check_psl
-	$(MAKE) .hw_project_done
+#image: check_psl
+image:
+#	$(MAKE) .hw_project_done
 	@echo -e "[BUILD IMAGE.........] start `date +"%T %a %b %d %Y"`\n"
 ifeq ($(USE_PRFLOW),TRUE)
 	snap-cloud-build ${SNAP_ROOT}/snap_env.sh
@@ -356,7 +357,7 @@ else
 	@echo "The process may be terminated by pressing <CTRL>-C at any time.";
 	@echo "After termination it can be restarted later."; echo
 	@$(MAKE) -s patch_version
-	@cd $(SETUP_DIR) && vivado -quiet -mode batch -source snap_build.tcl -notrace -log $(LOGS_DIR)/snap_build.log -journal $(LOGS_DIR)/snap_build.jou
+	@cd $(SETUP_DIR) && vivado -quiet -mode batch -source snap_build.tcl  -log $(LOGS_DIR)/snap_build.log -journal $(LOGS_DIR)/snap_build.jou
 	@$(RM) -r .bitstream_name.txt
 endif
 	@echo -e "[BUILD IMAGE.........] done  `date +"%T %a %b %d %Y"`"
