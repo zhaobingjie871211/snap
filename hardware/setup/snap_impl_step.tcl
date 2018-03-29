@@ -37,23 +37,22 @@ set widthCol4 $::env(WIDTHCOL4)
 if { $impl_flow == "CLOUD_BASE" } {
   set cloud_flow TRUE
   set prefix base_
-  set rpt_dir_prefix $rpt_dir/${step}
+  set rpt_dir_prefix $rpt_dir/${prefix}
 } elseif { $impl_flow == "CLOUD_MERGE" } {
   set cloud_flow TRUE
   set prefix merge_
-  set rpt_dir_prefix $rpt_dir/${step}
+  set rpt_dir_prefix $rpt_dir/${prefix}
 } else {
   set cloud_flow FALSE
   set rpt_dir_prefix $rpt_dir/
+
+  ##
+  ## save framework directives for later use
+  set place_directive     [get_property STEPS.PLACE_DESIGN.ARGS.DIRECTIVE [get_runs impl_1]]
+  set phys_opt_directive  [get_property STEPS.PHYS_OPT_DESIGN.ARGS.DIRECTIVE [get_runs impl_1]]
+  set route_directive     [get_property STEPS.ROUTE_DESIGN.ARGS.DIRECTIVE [get_runs impl_1]]
+  set opt_route_directive [get_property STEPS.POST_ROUTE_PHYS_OPT_DESIGN.ARGS.DIRECTIVE [get_runs impl_1]]
 }
-
-##
-## save framework directives for later use
-set place_directive     [get_property STEPS.PLACE_DESIGN.ARGS.DIRECTIVE [get_runs impl_1]]
-set phys_opt_directive  [get_property STEPS.PHYS_OPT_DESIGN.ARGS.DIRECTIVE [get_runs impl_1]]
-set route_directive     [get_property STEPS.ROUTE_DESIGN.ARGS.DIRECTIVE [get_runs impl_1]]
-set opt_route_directive [get_property STEPS.POST_ROUTE_PHYS_OPT_DESIGN.ARGS.DIRECTIVE [get_runs impl_1]]
-
 
 ##
 ## optimizing design
@@ -71,14 +70,14 @@ puts [format "%-*s%-*s%-*s%-*s"  $widthCol1 "" $widthCol2 "start opt_design" $wi
 if { [catch "$command > $logfile" errMsg] } {
   puts [format "%-*s%-*s%-*s%-*s"  $widthCol1 "" $widthCol2 "" $widthCol3 "ERROR: opt_design failed" $widthCol4 "" ]
   puts [format "%-*s%-*s%-*s%-*s"  $widthCol1 "" $widthCol2 "" $widthCol3 "       please check $logfile" $widthCol4 "" ]
-
+ 
   if { ![catch {current_instance}] } {
       write_checkpoint -force $dcp_dir/${step}_error.dcp    >> $logfile
   }
   exit 42
 } else {
   write_checkpoint   -force $dcp_dir/${step}.dcp          >> $logfile
-  report_utilization -file  ${rpt_dir_prefix}${step}_utilization.rpt -quiet
+  report_utilization -file  ${rpt_dir_prefix}_${step}_utilization.rpt -quiet
 }
 
 ##
