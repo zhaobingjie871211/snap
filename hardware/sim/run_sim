@@ -60,6 +60,7 @@
      -xsim)             SIM_OVER="xsim";;
      -irun)             SIM_OVER="irun";;
      -ncsim)            SIM_OVER="ncsim";;
+     -questa)           SIM_OVER="questa";;
      -app)		TST_NAME="$2";shift
      			if [[ ! -f ${SNAP_ROOT}/software/${TST_NAME} ]];then echo "file ${SNAP_ROOT}/software/${TST_NAME} not found, leaving";exit 11;fi;;
      -list)		TST_NAME='LIST';LISTNAME="$2";shift
